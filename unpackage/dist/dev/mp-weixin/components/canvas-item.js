@@ -171,20 +171,24 @@ var _default = {
   },
   methods: {
     drawImg: function drawImg(imgUrl) {
-      imgUrl = imgUrl || this.imgUrl;
-      if (!imgUrl) return;
-      var _this$canvasData = this.canvasData,
-        dWidth = _this$canvasData.dWidth,
-        dHeight = _this$canvasData.dHeight,
-        imgSpanWidth = _this$canvasData.imgSpanWidth,
-        imgSpanHeight = _this$canvasData.imgSpanHeight,
-        dx = _this$canvasData.dx,
-        dy = _this$canvasData.dy;
-      var ctx = this.ctx || uni.createCanvasContext("myCanvas-".concat(this.index), this);
-      ctx.drawImage(imgUrl, dx, dy, dWidth, dHeight);
-      ctx.draw();
+      var _this2 = this;
+      this.$nextTick(function () {
+        imgUrl = imgUrl || _this2.imgUrl;
+        if (!imgUrl) return;
+        var _this2$canvasData = _this2.canvasData,
+          dWidth = _this2$canvasData.dWidth,
+          dHeight = _this2$canvasData.dHeight,
+          imgSpanWidth = _this2$canvasData.imgSpanWidth,
+          imgSpanHeight = _this2$canvasData.imgSpanHeight,
+          dx = _this2$canvasData.dx,
+          dy = _this2$canvasData.dy;
+        var ctx = _this2.ctx || uni.createCanvasContext("myCanvas-".concat(_this2.index), _this2);
+        ctx.drawImage(imgUrl, dx, dy, dWidth, dHeight);
+        ctx.draw();
+      });
     },
     downLoad: function downLoad(cb) {
+      var _this = this;
       uni.canvasToTempFilePath({
         x: 0,
         y: 0,
@@ -194,6 +198,9 @@ var _default = {
         success: function success(res) {
           // 在H5平台下，tempFilePath 为 base64
           console.log(res.tempFilePath);
+
+          // 非h5
+
           wx.saveImageToPhotosAlbum({
             filePath: res.tempFilePath,
             success: function success(result) {
@@ -205,9 +212,13 @@ var _default = {
               console.log("\u4FDD\u5B58\u5931\u8D25".concat(JSON.stringify(err)));
             }
           });
+
+          // H5
         }
       }, this);
     },
+    // H5
+
     canvasIdErrorCallback: function canvasIdErrorCallback(e) {
       console.error(e.detail.errMsg);
     }

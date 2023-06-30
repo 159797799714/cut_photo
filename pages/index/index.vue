@@ -12,16 +12,13 @@
 				</view>
 		</view>
 		
-		<view class="box" :style="'height:'+windowHeight+'px'">
-			<!-- canvas层级太高，所以利用定位canvas不可见 -->
-			<view style="position: fixed;top: -100%;left: -100%;">
+		<!-- canvas层级太高，所以利用定位canvas不可见 -->
+		<view style="position: fixed;top: -100%;left: -100%;">
 				<canvasItem v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :ref="`canvas${index}`" class="canvas-item"/>
-			</view>
-			
-			<imgView v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :slipeWidth="slipeWidth"></imgView>
-			<!-- <imgView  :imgUrl="imgUrl" :index="1"  :canvasData="count[1]"></imgView> -->
-			
+		</view>
 		
+		<view class="box" :style="'height:'+windowHeight+'px'">
+			<imgView v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :slipeWidth="slipeWidth"></imgView>
 		</view>
 		
 		
@@ -40,7 +37,6 @@
 	export default {
 		components: {imgView, canvasItem},
 		data() {
-			
 			return {
 				imageValue: [],
 				imgUrl: '',
@@ -129,11 +125,87 @@
 						dy: imgSpanHeight * chu * -1,
 					})
 				}
-				
 				this.count = list
 				
 			},
-			downloadImg(index = 0) {
+			
+			// #ifndef H5 || APP-PLUS
+			// 判断是否请求过保存到相册授权
+			checkSettingAuthorize() {
+				return new Promise((resolve, reject) => {
+					uni.getSetting({
+					   success(res) {
+					      console.log('获取设置', res.authSetting)
+								const authSetting = JSON.stringify(res.authSetting)
+							  if (authSetting.indexOf('scope.writePhotosAlbum') === -1) {
+									resolve(false) // 未请求过授权，第一次获取权限
+								} else {
+									resolve(true) // 非第一次请求授权
+								}
+					   }
+					})
+				})
+			},
+			// 检测是否授权保存相册权限
+			getAuthorize() {
+				return new Promise((resolve, reject) => {
+					
+					uni.authorize({
+						scope: 'scope.writePhotosAlbum',
+						success(res) {
+							console.log('res', res)
+							resolve(true)
+						},
+						fail(err) {
+							console.log('err', err)
+							resolve(false)
+						}
+					})	
+				})
+			},
+			// #endif
+			
+			
+			async downloadImg(index = 0) {
+				
+				// #ifndef H5 || APP-PLUS
+				
+				const hadGet = await this.checkSettingAuthorize() // 是否请求过授权
+				const auth = await this.getAuthorize() // 是否授权保存相册
+				
+				// 不是第一次请求授权且拒绝授权
+				if (hadGet && !auth) {
+					uni.showModal({
+						title: '提示',
+						content: '请开启添加到相册权限',
+						confirmText: '去开启',
+						success: function (res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+								uni.openSetting({
+									success(result) {
+										console.log('打开设置成功', result)
+									},
+									fail(err) {
+										console.log('打开设置失败', err)
+									}
+								})
+							} else if (res.cancel) {
+								console.log('用户点击取消')
+							}
+						}
+					});
+					console.log('非第一次授权没权限')
+					return
+				} 
+				// 第一次授权，拒绝了
+				else if (!auth) {
+					console.log('第一次授权，拒绝了权限')
+					return
+				}
+				// #endif
+				
+				
 				const _this = this
 				this.$refs[`canvas${index}`][0].downLoad(isLoad => {
 					console.log(`第${index}张，下载：${isLoad}`)
@@ -178,18 +250,13 @@
 			// }
 		}
 		.foot-btn{
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: calc(100% - 40rpx);
-			display: flex;
-			justify-content: space-around;
 			padding: 20rpx 20rpx 0;
 			background: #FFFFFF;
 			box-shadow: 0px -10px 8px 0px rgba(0,47,125,0.1);
 			padding-bottom: env(safe-area-inset-bottom);
 			padding-bottom: contant(safe-area-inset-bottom);
 			.btn{
+				margin-top: 20rpx;
 				height: 88rpx;
 				background: #1C6BEE;
 				color: #ffffff;

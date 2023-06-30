@@ -142,6 +142,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 57));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 59));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -249,17 +251,106 @@ var _default = {
       }
       this.count = list;
     },
-    downloadImg: function downloadImg() {
-      var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var _this = this;
-      this.$refs["canvas".concat(index)][0].downLoad(function (isLoad) {
-        console.log("\u7B2C".concat(index, "\u5F20\uFF0C\u4E0B\u8F7D\uFF1A").concat(isLoad));
-        index += 1;
-        if (index >= _this.count.length) return uni.showToast({
-          title: '下载完成'
+    // 判断是否请求过保存到相册授权
+    checkSettingAuthorize: function checkSettingAuthorize() {
+      return new Promise(function (resolve, reject) {
+        uni.getSetting({
+          success: function success(res) {
+            console.log('获取设置', res.authSetting);
+            var authSetting = JSON.stringify(res.authSetting);
+            if (authSetting.indexOf('scope.writePhotosAlbum') === -1) {
+              resolve(false); // 未请求过授权，第一次获取权限
+            } else {
+              resolve(true); // 非第一次请求授权
+            }
+          }
         });
-        _this.downloadImg(index);
       });
+    },
+    // 检测是否授权保存相册权限
+    getAuthorize: function getAuthorize() {
+      return new Promise(function (resolve, reject) {
+        uni.authorize({
+          scope: 'scope.writePhotosAlbum',
+          success: function success(res) {
+            console.log('res', res);
+            resolve(true);
+          },
+          fail: function fail(err) {
+            console.log('err', err);
+            resolve(false);
+          }
+        });
+      });
+    },
+    downloadImg: function downloadImg() {
+      var _arguments = arguments,
+        _this2 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var index, hadGet, auth, _this;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                index = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : 0;
+                _context.next = 3;
+                return _this2.checkSettingAuthorize();
+              case 3:
+                hadGet = _context.sent;
+                _context.next = 6;
+                return _this2.getAuthorize();
+              case 6:
+                auth = _context.sent;
+                if (!(hadGet && !auth)) {
+                  _context.next = 13;
+                  break;
+                }
+                uni.showModal({
+                  title: '提示',
+                  content: '请开启添加到相册权限',
+                  confirmText: '去开启',
+                  success: function success(res) {
+                    if (res.confirm) {
+                      console.log('用户点击确定');
+                      uni.openSetting({
+                        success: function success(result) {
+                          console.log('打开设置成功', result);
+                        },
+                        fail: function fail(err) {
+                          console.log('打开设置失败', err);
+                        }
+                      });
+                    } else if (res.cancel) {
+                      console.log('用户点击取消');
+                    }
+                  }
+                });
+                console.log('非第一次授权没权限');
+                return _context.abrupt("return");
+              case 13:
+                if (auth) {
+                  _context.next = 16;
+                  break;
+                }
+                console.log('第一次授权，拒绝了权限');
+                return _context.abrupt("return");
+              case 16:
+                _this = _this2;
+                _this2.$refs["canvas".concat(index)][0].downLoad(function (isLoad) {
+                  console.log("\u7B2C".concat(index, "\u5F20\uFF0C\u4E0B\u8F7D\uFF1A").concat(isLoad));
+                  index += 1;
+                  if (index >= _this.count.length) return uni.showToast({
+                    title: '下载完成'
+                  });
+                  _this.downloadImg(index);
+                });
+              case 18:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 };

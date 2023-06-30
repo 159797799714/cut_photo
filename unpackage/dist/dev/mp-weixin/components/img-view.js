@@ -164,9 +164,9 @@ var _default = {
         dHeight = _ref.dHeight;
       imgSpanWidth -= Number(this.slipeWidth) * 2;
       imgSpanHeight -= Number(this.slipeWidth) * 2;
-      微信小程序不支持background本地静态资源图片路径, 故将本地资源转成base64;
+
+      // 微信小程序不支持background本地静态资源图片路径,故将本地资源转成base64
       return "background-repeat: no-repeat;\n\t\t\t\tbackground-image: url(".concat(this.urlTobase64(), ");\n\t\t\t\tbackground-size: ").concat(dWidth, "px ").concat(dHeight, "px;\n\t\t\t\tbackground-position: ").concat(dx, "px ").concat(dy, "px;\n\t\t\t\theight: ").concat(imgSpanHeight, "px;\n\t\t\t\twidth: ").concat(imgSpanWidth, "px;");
-      return "background-repeat: no-repeat;background-image: url(".concat(this.imgUrl, ");\n\t\t\t\tbackground-size: ").concat(dWidth, "px ").concat(dHeight, "px;\n\t\t\t\tbackground-position: ").concat(dx, "px ").concat(dy, "px;\n\t\t\t\theight: ").concat(imgSpanHeight, "px;\n\t\t\t\twidth: ").concat(imgSpanWidth, "px;");
     }
   },
   methods: {
