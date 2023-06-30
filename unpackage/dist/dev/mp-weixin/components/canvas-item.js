@@ -189,11 +189,14 @@ var _default = {
     },
     downLoad: function downLoad(cb) {
       var _this = this;
+      var _this$canvasData = this.canvasData,
+        dWidth = _this$canvasData.dWidth,
+        dHeight = _this$canvasData.dHeight;
       uni.canvasToTempFilePath({
         x: 0,
         y: 0,
-        destWidth: 700,
-        destHeight: 700,
+        destWidth: dWidth,
+        destHeight: dHeight,
         canvasId: "myCanvas-".concat(this.index),
         success: function success(res) {
           // 在H5平台下，tempFilePath 为 base64

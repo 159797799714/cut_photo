@@ -256,7 +256,8 @@
 			padding-bottom: env(safe-area-inset-bottom);
 			padding-bottom: contant(safe-area-inset-bottom);
 			.btn{
-				margin-top: 20rpx;
+				margin: 20rpx auto 0;
+				width: 95%;
 				height: 88rpx;
 				background: #1C6BEE;
 				color: #ffffff;

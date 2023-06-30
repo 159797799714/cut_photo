@@ -62,11 +62,12 @@
 			},
 			downLoad(cb) {
 				const _this = this
+					const { dWidth, dHeight} = this.canvasData
 				uni.canvasToTempFilePath({
 				  x: 0,
 				  y: 0,
-				  destWidth: 700,
-				  destHeight: 700,
+				  destWidth: dWidth,
+				  destHeight: dHeight,
 				  canvasId: `myCanvas-${this.index}`,
 				  success: function(res) {
 				    // 在H5平台下，tempFilePath 为 base64

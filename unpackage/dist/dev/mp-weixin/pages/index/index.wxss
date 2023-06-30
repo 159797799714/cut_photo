@@ -56,7 +56,8 @@ page {
   padding-bottom: contant(safe-area-inset-bottom);
 }
 .content .foot-btn .btn {
-  margin-top: 20rpx;
+  margin: 20rpx auto 0;
+  width: 95%;
   height: 88rpx;
   background: #1C6BEE;
   color: #ffffff;
