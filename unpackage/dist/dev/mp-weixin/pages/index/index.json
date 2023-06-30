@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "图片分身",
+  "usingComponents": {
+    "img-view": "/components/img-view",
+    "canvas-item": "/components/canvas-item"
+  }
+}
