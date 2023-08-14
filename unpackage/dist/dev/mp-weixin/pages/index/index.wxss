@@ -35,14 +35,13 @@ page {
 .content .uni-list {
   display: flex;
   justify-content: space-between;
-  box-shadow: 8px 0px 0px -10px rgba(0, 47, 125, 0.1);
+  box-shadow: 0px 10px 8px 0px rgba(0, 47, 125, 0.05);
   padding: 30rpx 20px;
 }
 .content .uni-list .list-right {
   color: #007aff;
 }
 .content .box {
-  background: #f5f5f5;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -51,7 +50,7 @@ page {
 .content .foot-btn {
   padding: 20rpx 20rpx 0;
   background: #FFFFFF;
-  box-shadow: 0px -10px 8px 0px rgba(0, 47, 125, 0.1);
+  box-shadow: 0px -10px 8px 0px rgba(0, 47, 125, 0.05);
   padding-bottom: env(safe-area-inset-bottom);
   padding-bottom: contant(safe-area-inset-bottom);
 }

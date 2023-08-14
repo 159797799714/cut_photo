@@ -37,26 +37,29 @@
 		computed: {
 			styleObj() {
 				let { imgSpanWidth, imgSpanHeight, dx, dy, dWidth, dHeight} = this.canvasData || {}
-				imgSpanWidth -= Number(this.slipeWidth) * 2
-				imgSpanHeight -= Number(this.slipeWidth) * 2
+				imgSpanWidth -= Number(this.slipeWidth)
+				imgSpanHeight -= Number(this.slipeWidth)
 				
 				
 				// #ifdef MP-WEIXIN 
 				// 微信小程序不支持background本地静态资源图片路径,故将本地资源转成base64
-				return  `background-repeat: no-repeat;
+				return  `margin-bottom: ${this.slipeWidth}px;
+					height: ${imgSpanHeight}px;
+					width: ${imgSpanWidth}px;
+					background-repeat: no-repeat;
 					background-image: url(${this.urlTobase64()});
 					background-size: ${dWidth}px ${dHeight}px;
-					background-position: ${dx}px ${dy}px;
-					height: ${imgSpanHeight}px;
-					width: ${imgSpanWidth}px;`
+					background-position: ${dx}px ${dy}px;`
 				// #endif
 				
 				// #ifndef MP-WEIXIN 
-				return  `background-repeat: no-repeat;background-image: url(${this.imgUrl});
-					background-size: ${dWidth}px ${dHeight}px;
-					background-position: ${dx}px ${dy}px;
+				return  `
 					height: ${imgSpanHeight}px;
-					width: ${imgSpanWidth}px;`
+					width: ${imgSpanWidth}px;
+					margin-bottom: ${this.slipeWidth}px;
+					background-repeat: no-repeat;background-image: url(${this.imgUrl});
+					background-size: ${dWidth}px ${dHeight}px;
+					background-position: ${dx}px ${dy}px;`
 				// #endif
 			}
 		},

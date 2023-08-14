@@ -1,8 +1,6 @@
 <template>
-	<view class="canvas-box">
-		<canvas :canvas-id="`myCanvas-${index}`" :id="`myCanvas-${index}`" class="my-canvas"  :style="{height: canvasData.imgSpanHeight+'px',width: canvasData.imgSpanWidth+'px'}"  @error="canvasIdErrorCallback"></canvas>
-	</view>
-		
+	<canvas :canvas-id="`myCanvas-${index}`" :id="`myCanvas-${index}`" class="my-canvas"  :style="{height: canvasData.imgSpanHeight+'px',width: canvasData.imgSpanWidth+'px'}"  @error="canvasIdErrorCallback"></canvas>
+
 </template>
 
 <script>
@@ -135,6 +133,7 @@
 <style lang="scss">
 
 .my-canvas{
+	float: left;
 	display: block!important;
 	z-index: 1;
 }

@@ -17,8 +17,10 @@
 				<canvasItem v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :ref="`canvas${index}`" class="canvas-item"/>
 		</view>
 		
-		<view class="box" :style="'height:'+windowHeight+'px'">
-			<imgView v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :slipeWidth="slipeWidth"></imgView>
+		<view class="blank-banner" :style="'min-height:'+windowHeight+'px'">
+			<view class="bg-ff box">
+				<imgView v-for="(item, index) in count" :key="index" :imgUrl="imgUrl" :index="index"  :canvasData="item" :slipeWidth="slipeWidth"></imgView>
+			</view>
 		</view>
 		
 		
@@ -166,7 +168,7 @@
 			// #endif
 			
 			
-			async downloadImg(index = 0) {
+			async downloadImg(index = 0, loadStatusList = []) {
 				
 				// #ifndef H5 || APP-PLUS
 				
@@ -207,13 +209,26 @@
 				
 				
 				const _this = this
+				uni.showLoading({
+					title: '下载中',
+					mask: true
+				})
 				this.$refs[`canvas${index}`][0].downLoad(isLoad => {
 					console.log(`第${index}张，下载：${isLoad}`)
+					
+					loadStatusList.push(isLoad)
+					
+					const loadSuccessList = loadStatusList.filter(item => item === true)
+					const loadSuccessCount = loadSuccessList.length
+					
 					index += 1
-					if (index >= _this.count.length) return uni.showToast({
-						title: '下载完成'
-					})
-					_this.downloadImg(index)
+					if (index >= _this.count.length) {
+						uni.hideLoading()
+						return uni.showToast({
+							title: `成功下载${loadSuccessCount}张图`
+						})
+					}
+					_this.downloadImg(index, loadStatusList)
 				})
 			}
 		}
@@ -231,28 +246,22 @@
 		.uni-list{
 			display: flex;
 			justify-content: space-between;
-			box-shadow: 8px 0px 0px -10px rgba(0,47,125,0.1);
+			box-shadow: 0px 10px 8px 0px rgba(0, 47, 125, 0.05);
 			padding: 30rpx 20px;
 			.list-right{
 				color: $uni-color-primary;
 			}
 		}
 		.box{
-			background: #f5f5f5;
 			display: flex;
 			justify-content: space-around;
 			flex-wrap: wrap;
 			overflow-y: auto;
-			// .canvas-item{
-			// 	overflow: hidden;
-			// 	float: left;
-			// 	box-sizing: border-box;
-			// }
 		}
 		.foot-btn{
 			padding: 20rpx 20rpx 0;
 			background: #FFFFFF;
-			box-shadow: 0px -10px 8px 0px rgba(0,47,125,0.1);
+			box-shadow: 0px -10px 8px 0px rgba(0,47,125,0.05);
 			padding-bottom: env(safe-area-inset-bottom);
 			padding-bottom: contant(safe-area-inset-bottom);
 			.btn{

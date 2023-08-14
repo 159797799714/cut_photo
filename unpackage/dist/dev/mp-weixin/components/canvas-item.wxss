@@ -25,6 +25,7 @@
 /* 透明度 */
 /* 文章场景相关 */
 .my-canvas {
+  float: left;
   display: block !important;
   z-index: 1;
 }

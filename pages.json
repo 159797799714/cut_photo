@@ -5,8 +5,43 @@
 			"style": {
 				"navigationBarTitleText": "图片分身"
 			}
+		},
+		{
+			"path": "pages/list/index",
+			"style": {
+				"navigationBarTitleText": "列表"
+			}
+		},
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
 		}
 	],
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#1296db",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/image/tabbar/index.png",
+			"selectedIconPath": "static/image/tabbar/index_HL.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/list/index",
+			"iconPath": "static/image/tabbar/list.png",
+			"selectedIconPath": "static/image/tabbar/list_HL.png",
+			"text": "列表"
+		}, {
+			"pagePath": "pages/home/index",
+			"iconPath": "static/image/tabbar/home.png",
+			"selectedIconPath": "static/image/tabbar/home_HL.png",
+			"text": "我的"
+		}]
+	},
+
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "图片分身",
